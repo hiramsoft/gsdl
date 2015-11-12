@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <title>{$ title $}</title>
+
+    <script src="{$ site.relpath('/acornsio.js') $}"></script>
+
+    <link rel="stylesheet" href="{$ site.relpath('/app.css') $}">
+
+    <script src="{$ site.relpath('/bootstrap.js') $}"></script>
+
+</head>
+<body>
+
+{% block body %}{% endblock %}
+
+<!-- Begin Footer -->
+
+<footer class="row">
+    <div class="col-xs-12 text-center">
+        <small>
+            Copyright &copy; 2015 Example Corporation
+            |
+            Revision
+            {$ build.short $}
+        </small>
+    </div>
+</footer>
+
+<!-- End Footer -->
+
+
+</body>
+</html>
