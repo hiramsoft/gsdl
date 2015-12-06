@@ -1,6 +1,6 @@
 {
   "name": "gsdl",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Gulp Standard Directory Layout, a ready-to-go porcelain task for gulp.",
   "main": "gsdl.js",
   "scripts": {

@@ -4,6 +4,7 @@
 
 import _ from 'lodash';
 import $log from 'hlog';
+import good from './nested-folder/good-organization-stuff.js';
 
 class MyDemoApplication{
     constructor(){
@@ -15,6 +16,7 @@ class MyDemoApplication{
         $log.info("Doing someting with just JS!");
         let myEl = document.querySelector(".put-your-classes-here");
         myEl.innerHTML = "If you are reading this then the demo works!";
+	    good.doStuff();
     }
 }
 

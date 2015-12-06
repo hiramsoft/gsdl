@@ -397,6 +397,30 @@ module.exports._appendBasePaths = function(mergedSettings){
         else {
             setting.destPath = DIST_NAME;
         }
+
+	    if(setting.watchPath){
+		    if (_.isArray(setting.watchPath)) {
+			    setting.watchPath = _.map(setting.watchPath, function (p) {
+				    if (p.indexOf(SRC_NAME) < 0) {
+					    return path.join(SRC_NAME, p);
+				    }
+				    else {
+					    return p;
+				    }
+			    })
+		    }
+		    else {
+			    if (setting.watchPath.indexOf(SRC_NAME) < 0) {
+				    setting.watchPath = path.join(SRC_NAME, setting.watchPath);
+			    }
+			    else {
+				    // skip
+			    }
+		    }
+	    }
+	    else {
+		    setting.watchPath = setting.srcPath;
+	    }
     });
 
     // need to make gnunjucks and ng templates work together
@@ -425,14 +449,17 @@ module.exports._acceptOptions = function(opts){
             },
             "es6": {
                 "srcPath": ["es6/*.js"],
+	            "watchPath": ["es6/**/*.js"],
                 "destPath": ""
             },
             "less": {
                 "srcPath": ["less/*.less"],
+	            "watchPath" : ["less/**/*.less"],
                 "destPath": ""
             },
             "scss": {
                 "srcPath": ["sass/*.sass", "scss/*.scss"],
+	            "watchPath": ["sass/**/*.sass", "scss/**/*.scss"],
                 "destPath": ""
             },
             "js": {
@@ -530,38 +557,20 @@ module.exports.dev = function(gulp, opts) {
 
     gulp.task('gsdl-watch', ['default'], function() {
         var allOpts = module.exports._acceptOptions(opts);
-        gulp.watch(allOpts.style.srcPath, ['gsdl-build-style']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.es6.srcPath, ['gsdl-build-es6']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.js.srcPath, ['gsdl-build-js']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.css.srcPath, ['gsdl-build-css']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.less.srcPath, ['gsdl-build-less']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.scss.srcPath, ['gsdl-build-scss']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.html.srcPath, ['gsdl-build-html']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.style.watchPath, ['gsdl-build-style']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.es6.watchPath, ['gsdl-build-es6']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.js.watchPath, ['gsdl-build-js']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.css.watchPath, ['gsdl-build-css']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.less.watchPath, ['gsdl-build-less']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.scss.watchPath, ['gsdl-build-scss']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.html.watchPath, ['gsdl-build-html']).on('change', module.exports._reportChange);
 
-        gulp.watch(allOpts.fonts.srcPath, ['gsdl-copy-fonts']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.statics.srcPath, ['gsdl-copy-static']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.data.srcPath, ['gsdl-copy-data']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.fonts.watchPath, ['gsdl-copy-fonts']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.statics.watchPath, ['gsdl-copy-static']).on('change', module.exports._reportChange);
+        gulp.watch(allOpts.data.watchPath, ['gsdl-copy-data']).on('change', module.exports._reportChange);
     });
 
     gulp.task('watch', ['gsdl-watch']);
-
-    gulp.task('watch2', ['build'], function(){
-        var allOpts = module.exports._acceptOptions(opts);
-        gulp.watch(allOpts.style.srcPath, ['gsdl-build-style']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.es6.srcPath, ['gsdl-build-es6']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.js.srcPath, ['gsdl-build-js']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.css.srcPath, ['gsdl-build-css']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.less.srcPath, ['gsdl-build-less']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.scss.srcPath, ['gsdl-build-scss']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.html.srcPath, ['gsdl-build-html']).on('change', module.exports._reportChange);
-
-        gulp.watch(allOpts.fonts.srcPath, ['gsdl-copy-fonts']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.statics.srcPath, ['gsdl-copy-static']).on('change', module.exports._reportChange);
-        gulp.watch(allOpts.data.srcPath, ['gsdl-copy-data']).on('change', module.exports._reportChange);
-    });
-
-
-    gulp.task('is-stuck', ['watch2'], runServer());
 };
 
 ////////////////////////////////////////
